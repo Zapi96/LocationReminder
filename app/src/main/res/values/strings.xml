@@ -29,6 +29,7 @@
     <string name="content_text">Location Reminder</string>
     <string name="select_title">Please select title</string>
     <string name="select_location">Please select location</string>
+    <string name="geofences_added">No problem in adding geofences.</string>
     <string name="geofences_not_added">Problem in adding geofences.</string>
     <string name="welcome">Welcome</string>
     <string name="err_enter_title">Please enter title</string>
@@ -40,4 +41,14 @@
     <string name="geofence_too_many_geofences">Your app has registered too many geofences.</string>
     <string name="geofence_too_many_pending_intents">You have provided too many PendingIntents to the addGeofences() call.</string>
     <string name="error_adding_geofence">Error Happened, Can\'t Add Geofence</string>
+
+    <!-- Description strings -->
+    <string name="reminders_description">Description: %s</string>
+    <string name="reminders_location">Location: %s</string>
+    <string name="reminders_latitude">Latitude: %s</string>
+    <string name="reminders_longitude">Longitude: %s</string>
+
+
+
+
 </resources>
