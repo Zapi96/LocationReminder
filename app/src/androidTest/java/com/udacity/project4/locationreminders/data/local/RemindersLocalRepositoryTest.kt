@@ -34,7 +34,26 @@ class RemindersLocalRepositoryTest: ReminderDataSource {
 
     private var shouldReturnError = false
 
+    private lateinit var repository: RemindersLocalRepository
+    private lateinit var database: RemindersDatabase
+    private val reminder = ReminderDTO("title", "description", "location", 0.0, 0.0)
+
+
     private val observableReminders = MutableLiveData<Result<List<ReminderDTO>>>()
+
+    @get:Rule
+    var instantExecutorRule= InstantTaskExecutorRule()
+
+    @Before
+    fun setUpDb() {
+        // Create and use an in- memory database which is only used for testing
+        database = Room.inMemoryDatabaseBuilder(
+            ApplicationProvider.getApplicationContext(), RemindersDatabase::class.java
+        ).allowMainThreadQueries()
+            .build()
+
+        repository = RemindersLocalRepository(database.reminderDao(), Dispatchers.Main)
+    }
 
     fun setReturnError(value: Boolean) {
         shouldReturnError = value
@@ -82,7 +101,7 @@ class RemindersLocalRepositoryTest: ReminderDataSource {
         reminderData[id]?.let {
             return Result.Success(it)
         }
-        return Result.Error("could not find task")
+        return Result.Error("Reminder not found")
     }
 
     override suspend fun saveReminder(reminder: ReminderDTO) {
@@ -99,6 +118,17 @@ class RemindersLocalRepositoryTest: ReminderDataSource {
             reminderData[reminder.id] = reminder
         }
         runBlocking { refreshReminders() }
+    }
+
+    @Test
+    fun emptyReminders_returnsError() = runBlocking {
+        repository.deleteAllReminders()
+
+        val result = repository.getReminder(reminder.id)
+        assertThat(result is Result.Error, `is`(true))
+
+        result as Result.Error
+        assertThat(result.message, `is`("Reminder not found!"))
     }
 
 }

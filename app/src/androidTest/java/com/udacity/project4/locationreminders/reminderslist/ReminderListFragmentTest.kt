@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
@@ -25,6 +26,8 @@ import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.local.*
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
+import com.udacity.project4.util.DataBindingIdlingResource
+import com.udacity.project4.util.monitorFragment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
@@ -57,12 +60,16 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
 
     private lateinit var repository: ReminderDataSource
     private lateinit var appContext: Application
+    private val dataBindingIdlingResource = DataBindingIdlingResource()
+
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
+
+
 
     fun init() {
         stopKoin()
@@ -118,6 +125,8 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
         verify(navController).navigate(ReminderListFragmentDirections.toSaveReminder())
     }
 
+
+
     @Test
     fun saveReminder() = mainCoroutineRule.runBlockingTest {
         val reminder = ReminderDTO(
@@ -133,7 +142,14 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
             }
 
         }
-        launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
+
+        val scenario = launchFragmentInContainer<ReminderListFragment>(Bundle.EMPTY, R.style.AppTheme)
+        val navController = mock(NavController::class.java)
+        scenario.onFragment {
+            Navigation.setViewNavController(it.view!!, navController)
+        }
+        dataBindingIdlingResource.monitorFragment(scenario)
+
         onView(withText("Title")).check(matches(isDisplayed()))
     }
 

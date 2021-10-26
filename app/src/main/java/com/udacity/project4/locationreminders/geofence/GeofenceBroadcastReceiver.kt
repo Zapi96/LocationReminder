@@ -10,7 +10,6 @@ import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.gms.location.GeofencingEvent
 import com.udacity.project4.R
-import com.udacity.project4.locationreminders.savereminder.SaveReminderFragment.Companion.ACTION_GEOFENCE_EVENT
 import com.udacity.project4.locationreminders.savereminder.geofence.GeofencingConstants
 import com.udacity.project4.locationreminders.savereminder.geofence.errorMessage
 import com.udacity.project4.locationreminders.savereminder.geofence.sendGeofenceEnteredNotification
