@@ -121,7 +121,7 @@ class RemindersLocalRepositoryTest: ReminderDataSource {
     }
 
     @Test
-    fun emptyReminders_returnsError() = runBlocking {
+    fun emptyReminders() = runBlocking {
         repository.deleteAllReminders()
 
         val result = repository.getReminder(reminder.id)

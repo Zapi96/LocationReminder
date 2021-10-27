@@ -14,12 +14,14 @@ import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.getOrAwaitValue
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.context.stopKoin
 import org.robolectric.annotation.Config
 
 @SmallTest
@@ -29,31 +31,43 @@ import org.robolectric.annotation.Config
 class RemindersListViewModelTest {
 
     private lateinit var remindersListViewModel: RemindersListViewModel
-    private lateinit var remindersRepo: FakeTestRepository
+    private lateinit var dataSource: FakeDataSource
+
+    private val reminder = ReminderDTO(
+        "Title1",
+        "Description",
+        "Location",
+        0.0,
+        0.0)
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
+    @ExperimentalCoroutinesApi
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
+    private val remindersList = mutableListOf<ReminderDTO>()
+
     @Before
     fun setupViewModel(){
+        stopKoin()
         val app = getApplicationContext<MyApp>()
-        remindersRepo = FakeTestRepository()
-        val reminder = ReminderDTO(
-            "Title1",
-            "Description",
-            "Location",
-            0.0,
-            0.0)
-        remindersRepo.addReminders(reminder)
-        remindersListViewModel = RemindersListViewModel(app, remindersRepo)
+        dataSource = FakeDataSource(remindersList)
+        remindersListViewModel = RemindersListViewModel(app, dataSource)
+
     }
 
     @Test
     fun loadReminders(){
         remindersListViewModel.loadReminders()
         assertThat(remindersListViewModel.remindersList.getOrAwaitValue()?.size, `is`(1))
+    }
+
+    @Test
+    fun notfoundReminder() = mainCoroutineRule.runBlockingTest {
+        dataSource.setShouldReturnError(true)
+        remindersListViewModel.loadReminders()
+        assertThat(remindersListViewModel.showSnackBar.value, `is`("Reminders not found"))
     }
 }

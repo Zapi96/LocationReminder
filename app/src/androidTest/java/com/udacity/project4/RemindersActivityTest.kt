@@ -26,6 +26,7 @@ import com.udacity.project4.util.monitorActivity
 import com.udacity.project4.utils.EspressoIdlingResource
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.not
+import org.hamcrest.core.IsNot
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -114,6 +115,7 @@ class RemindersActivityTest :
         )
 
         onView(withId(R.id.reminderTitle)).perform(typeText(reminder.title))
+        onView(withId(R.id.reminderDescription)).perform(typeText(reminder.description))
         Espresso.closeSoftKeyboard()
         onView(withId(R.id.selectLocation)).perform(click())
 
@@ -124,7 +126,7 @@ class RemindersActivityTest :
 
         // Check
         onView(withText(R.string.reminder_saved))
-            .inRoot(withDecorView(not((getActivity(activityScenario)?.window?.decorView)))).check(matches(isDisplayed()))
+            .inRoot(withDecorView(IsNot.not((getActivity(activityScenario)?.window?.decorView)))).check(matches(isDisplayed()))
 
         activityScenario.close()
     }

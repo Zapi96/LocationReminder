@@ -56,7 +56,7 @@ import org.koin.core.context.startKoin
 @ExperimentalCoroutinesApi
 //UI Testing
 @MediumTest
-class ReminderListFragmentTest : AutoCloseKoinTest() {
+class ReminderListFragmentTest : KoinTest {
 
     private lateinit var repository: ReminderDataSource
     private lateinit var appContext: Application
@@ -66,11 +66,7 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    @get:Rule
-    var mainCoroutineRule = MainCoroutineRule()
-
-
-
+    @Before
     fun init() {
         stopKoin()
         appContext = getApplicationContext()
@@ -128,7 +124,7 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
 
 
     @Test
-    fun saveReminder() = mainCoroutineRule.runBlockingTest {
+    fun saveReminder() = runBlockingTest {
         val reminder = ReminderDTO(
             title = "Title",
             description = "Description",
@@ -137,9 +133,8 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
             longitude = 0.0
         )
         runBlocking {
-            repository.apply {
-                saveReminder(reminder)
-            }
+            repository.saveReminder(reminder)
+
 
         }
 
@@ -153,7 +148,7 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
         onView(withText("Title")).check(matches(isDisplayed()))
     }
 
-    
+
 
 
 

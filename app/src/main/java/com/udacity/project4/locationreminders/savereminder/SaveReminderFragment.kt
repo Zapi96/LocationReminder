@@ -62,6 +62,7 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.test.core.app.ApplicationProvider
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -296,11 +297,7 @@ class SaveReminderFragment : BaseFragment() {
 
             geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent)?.run {
                 addOnSuccessListener {
-                    Toast.makeText(
-                        requireContext(), R.string.geofences_added,
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
+
                     Log.e("Add Geofence", geofence.requestId)
                 }
                 addOnFailureListener {
