@@ -24,7 +24,6 @@ import org.junit.runner.RunWith
 import org.koin.core.context.stopKoin
 import org.robolectric.annotation.Config
 
-@SmallTest
 @RunWith(AndroidJUnit4::class)
 @ExperimentalCoroutinesApi
 @Config(sdk = [Build.VERSION_CODES.P])
@@ -33,8 +32,15 @@ class RemindersListViewModelTest {
     private lateinit var remindersListViewModel: RemindersListViewModel
     private lateinit var dataSource: FakeDataSource
 
-    private val reminder = ReminderDTO(
+    private val reminder1 = ReminderDTO(
         "Title1",
+        "Description",
+        "Location",
+        0.0,
+        0.0)
+
+    private val reminder2 = ReminderDTO(
+        "Title2",
         "Description",
         "Location",
         0.0,
@@ -52,16 +58,25 @@ class RemindersListViewModelTest {
     @Before
     fun setupViewModel(){
         stopKoin()
-        val app = getApplicationContext<MyApp>()
         dataSource = FakeDataSource(remindersList)
-        remindersListViewModel = RemindersListViewModel(app, dataSource)
+        remindersListViewModel = RemindersListViewModel(ApplicationProvider.getApplicationContext(), dataSource)
 
     }
 
     @Test
-    fun loadReminders(){
+    fun loadReminders()= mainCoroutineRule.runBlockingTest{
+        remindersList.add(reminder1)
+        remindersList.add(reminder2)
+
+        mainCoroutineRule.pauseDispatcher()
+
         remindersListViewModel.loadReminders()
-        assertThat(remindersListViewModel.remindersList.getOrAwaitValue()?.size, `is`(1))
+
+        assertThat(remindersListViewModel.showLoading.getOrAwaitValue(), `is`(true) )
+
+        mainCoroutineRule.resumeDispatcher()
+        assertThat(remindersListViewModel.showLoading.getOrAwaitValue(), `is`(false))
+        assertThat(remindersListViewModel.showNoData.getOrAwaitValue(), `is`(false))
     }
 
     @Test

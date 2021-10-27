@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.ViewModel
@@ -28,6 +29,7 @@ import com.udacity.project4.locationreminders.data.local.*
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.util.DataBindingIdlingResource
 import com.udacity.project4.util.monitorFragment
+import com.udacity.project4.util.monitorListFragment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
@@ -113,10 +115,13 @@ class ReminderListFragmentTest : KoinTest {
             Bundle(),
             R.style.AppTheme
         )
+        dataBindingIdlingResource.monitorListFragment(fragmentScenario)
+
         val navController = mock(NavController::class.java)
         fragmentScenario.onFragment {
             Navigation.setViewNavController(it.view!!, navController)
         }
+
         onView(withId(R.id.addReminderFAB)).perform(click())
         verify(navController).navigate(ReminderListFragmentDirections.toSaveReminder())
     }

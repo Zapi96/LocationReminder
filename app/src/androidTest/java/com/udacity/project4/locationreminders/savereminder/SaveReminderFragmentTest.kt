@@ -2,6 +2,7 @@ package com.udacity.project4.locationreminders.savereminder
 
 import android.os.Bundle
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.NavController
@@ -19,9 +20,11 @@ import com.udacity.project4.locationreminders.data.local.LocalDB
 import com.udacity.project4.locationreminders.data.local.RemindersDatabase
 import com.udacity.project4.locationreminders.data.local.RemindersLocalRepository
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
+import com.udacity.project4.locationreminders.reminderslist.ReminderListFragment
 import com.udacity.project4.locationreminders.reminderslist.RemindersListViewModel
 import com.udacity.project4.util.DataBindingIdlingResource
 import com.udacity.project4.util.monitorFragment
+import com.udacity.project4.util.monitorSaveReminderFragment
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.core.Is
 import org.junit.Assert.*
@@ -75,11 +78,12 @@ class SaveReminderFragmentTest: KoinTest {
 
 
     @Test
-    fun noTitle_ShowsTitleError(){
-        val navController = Mockito.mock(NavController::class.java)
+    fun noTitle(){
         val scenario = launchFragmentInContainer<SaveReminderFragment>(Bundle.EMPTY, R.style.AppTheme)
 
-        dataBindingIdlingResource.monitorFragment(scenario)
+        val navController = Mockito.mock(NavController::class.java)
+
+        dataBindingIdlingResource.monitorSaveReminderFragment(scenario)
 
         scenario.onFragment {
             Navigation.setViewNavController(it.view!!, navController)
