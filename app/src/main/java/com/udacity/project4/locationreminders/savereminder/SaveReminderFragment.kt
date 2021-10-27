@@ -1,43 +1,6 @@
 package com.udacity.project4.locationreminders.savereminder
 
-//import android.Manifest
-//import android.annotation.SuppressLint
-//import android.annotation.TargetApi
-//import android.app.Activity.RESULT_OK
-//import android.app.PendingIntent
-//import android.content.Context
-//import android.content.Intent
-//import android.content.IntentSender
-//import android.content.pm.PackageManager
-//import android.net.Uri
-//import android.os.Bundle
-//import android.provider.Settings
-//import android.util.Log
-//import android.view.LayoutInflater
-//import android.view.View
-//import android.view.ViewGroup
-//import android.widget.Toast
-//import androidx.core.app.ActivityCompat
-//import androidx.core.content.ContextCompat.checkSelfPermission
-//import androidx.databinding.DataBindingUtil
-//import com.google.android.gms.common.api.ResolvableApiException
-//import com.google.android.gms.location.*
-//import com.google.android.material.snackbar.Snackbar
-//import com.udacity.project4.BuildConfig
-//import com.udacity.project4.R
-//import com.udacity.project4.base.BaseFragment
-//import com.udacity.project4.base.NavigationCommand
-//import com.udacity.project4.databinding.FragmentSaveReminderBinding
-//import com.udacity.project4.locationreminders.geofence.GeofenceBroadcastReceiver
-//import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
-//import com.udacity.project4.locationreminders.savereminder.geofence.GeofencingConstants
-//import com.udacity.project4.locationreminders.savereminder.selectreminderlocation.SelectLocationFragment.Companion.ACTION_GEOFENCE_EVENT
-//import com.udacity.project4.locationreminders.savereminder.selectreminderlocation.SelectLocationFragment.Companion.REQUEST_TURN_DEVICE_LOCATION_ON
-//import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
-//import org.koin.android.ext.android.inject
-//import androidx.activity.result.IntentSenderRequest
-//import androidx.activity.result.contract.ActivityResultContracts
-//package com.udacity.project4.locationreminders.savereminder
+
 
 import android.Manifest
 import android.annotation.SuppressLint
